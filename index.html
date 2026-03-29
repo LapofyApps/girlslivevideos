@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveConnect - Free Video & Audio Call Simulator</title>
+  <meta name="description" content="Experience free live video calls, audio calls, and chat simulator with real profiles. Fun and entertainment platform." />
+
+  <!-- Adsterra Head Script - Replace with your actual Adsterra script -->
+  <!-- <script async src="//pagead2.adsterra.com/YOUR_KEY.js"></script> -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ===== TOP ANNOUNCEMENT BAR ===== -->
+<div class="top-bar">
+  <span class="pulse-dot"></span>
+  <span>🔴 LIVE NOW — 2,847 people online · Free to use · No registration needed</span>
+</div>
+
+<!-- ===== HEADER ===== -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">📡</div>
+      <div class="logo-text">
+        <span class="logo-name">LiveConnect</span>
+        <span class="logo-tag">Video & Call Simulator</span>
+      </div>
+    </div>
+    <nav class="nav" id="nav">
+      <a href="#" class="nav-link active">Home</a>
+      <a href="#profiles" class="nav-link">Profiles</a>
+      <a href="#how" class="nav-link">How It Works</a>
+      <a href="#faq" class="nav-link">FAQ</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-bg-orbs">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">✨ Fun Simulator Platform</div>
+    <h1 class="hero-title">Connect with <span class="gradient-text">Live Profiles</span></h1>
+    <p class="hero-desc">Experience free video calls, audio calls &amp; chat simulator — no sign-up needed. 100% fun &amp; entertainment only.</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num" id="onlineCount">2,847</span><span class="stat-label">Online Now</span></div>
+      <div class="stat-sep"></div>
+      <div class="stat"><span class="stat-num">50K+</span><span class="stat-label">Total Profiles</span></div>
+      <div class="stat-sep"></div>
+      <div class="stat"><span class="stat-num">Free</span><span class="stat-label">Always</span></div>
+    </div>
+    <a href="#profiles" class="cta-btn">
+      <span>Browse Profiles</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+  <div class="hero-visual">
+    <div class="phone-mockup">
+      <div class="phone-screen">
+        <div class="call-animation">
+          <div class="caller-avatar"><img src="https://randomuser.me/api/portraits/women/7.jpg" alt="Emma" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid rgba(233,69,96,0.6);" /></div>
+          <div class="caller-name">Priya, 22</div>
+          <div class="call-status">Calling...</div>
+          <div class="call-rings">
+            <div class="ring r1"></div>
+            <div class="ring r2"></div>
+            <div class="ring r3"></div>
+          </div>
+          <div class="call-btns">
+            <div class="cbtn decline">📵</div>
+            <div class="cbtn accept">📞</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== AD BANNER TOP (Adsterra 728x90 or 320x50 mobile) ===== -->
+<div class="ad-container ad-top">
+  <div class="ad-label">Advertisement</div>
+  <!-- REPLACE THIS DIV WITH YOUR ADSTERRA BANNER CODE -->
+  <div class="ad-placeholder">
+    <img src="https://placehold.co/728x90/1a1a2e/e94560?text=Your+Adsterra+Ad+Here+(728x90)" alt="Ad" class="ad-img-desktop" />
+    <img src="https://placehold.co/320x50/1a1a2e/e94560?text=Adsterra+Ad+(320x50)" alt="Ad" class="ad-img-mobile" />
+  </div>
+  <!--
+  ADSTERRA CODE EXAMPLE — paste your atOptions script here:
+  <script type="text/javascript">
+    atOptions = { 'key': 'YOUR_KEY', 'format': 'iframe', 'height': 90, 'width': 728, 'params': {} };
+  </script>
+  <script type="text/javascript" src="//www.topcreativeformat.com/YOUR_KEY/invoke.js"></script>
+  -->
+</div>
+
+<!-- ===== FILTER BAR ===== -->
+<section class="filter-section" id="profiles">
+  <div class="container">
+    <div class="filter-header">
+      <h2 class="section-title">🔥 Live Profiles</h2>
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="video">📹 Video</button>
+        <button class="filter-btn" data-filter="audio">🎙️ Audio</button>
+        <button class="filter-btn" data-filter="chat">💬 Chat</button>
+      </div>
+    </div>
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search by name or location..." />
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROFILES GRID ===== -->
+<section class="profiles-section">
+  <div class="container">
+    <div class="profiles-grid" id="profilesGrid"></div>
+    <button class="load-more-btn" id="loadMoreBtn">Load More Profiles</button>
+  </div>
+</section>
+
+<!-- ===== AD BANNER MID (Adsterra 300x250 Native/Display) ===== -->
+<div class="ad-container ad-mid">
+  <div class="ad-label">Advertisement</div>
+  <!-- REPLACE WITH YOUR ADSTERRA 300x250 CODE -->
+  <div class="ad-placeholder">
+    <img src="https://placehold.co/300x250/16213e/e94560?text=Adsterra+300x250+Ad" alt="Ad" />
+  </div>
+</div>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="how-section" id="how">
+  <div class="container">
+    <h2 class="section-title text-center">How It Works</h2>
+    <p class="section-sub text-center">Simple, free, and instant — no sign-up required</p>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-icon">👤</div>
+        <div class="step-num">01</div>
+        <h3>Choose a Profile</h3>
+        <p>Browse hundreds of profiles. Pick anyone you like — all are online and ready.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-icon">📞</div>
+        <div class="step-num">02</div>
+        <h3>Start the Simulation</h3>
+        <p>Tap the call or video button. Watch the realistic calling screen animate live.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-icon">🎉</div>
+        <div class="step-num">03</div>
+        <h3>Have Fun!</h3>
+        <p>Share with friends as a prank or just enjoy the fun simulator experience.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <h2 class="section-title text-center">Frequently Asked Questions</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q">Is this a real calling app? <span>+</span></button>
+        <div class="faq-a">No. This is a 100% simulated entertainment platform. All calls and messages are fake and for fun only.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Do I need to register? <span>+</span></button>
+        <div class="faq-a">No registration needed. Just visit the site and start using it instantly — completely free.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Are the profiles real people? <span>+</span></button>
+        <div class="faq-a">No. All profile images are AI-generated or stock photos. No real personal data is used.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Is it safe for kids? <span>+</span></button>
+        <div class="faq-a">Yes, there is no adult content. It is a clean entertainment and fun simulator suitable for all ages.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== AD BANNER BOTTOM ===== -->
+<div class="ad-container ad-bottom">
+  <div class="ad-label">Advertisement</div>
+  <!-- REPLACE WITH YOUR ADSTERRA BANNER CODE -->
+  <div class="ad-placeholder">
+    <img src="https://placehold.co/728x90/1a1a2e/e94560?text=Your+Adsterra+Ad+Here+(728x90)" alt="Ad" class="ad-img-desktop" />
+    <img src="https://placehold.co/320x50/1a1a2e/e94560?text=Adsterra+Ad+(320x50)" alt="Ad" class="ad-img-mobile" />
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-icon">📡</div>
+          <div class="logo-text">
+            <span class="logo-name">LiveConnect</span>
+            <span class="logo-tag">Simulator Platform</span>
+          </div>
+        </div>
+        <p>A fun entertainment platform for video call, audio call &amp; chat simulation. Not a real communication app.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <a href="#">Home</a>
+        <a href="#profiles">Profiles</a>
+        <a href="#how">How It Works</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div class="footer-links">
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Disclaimer</a>
+        <a href="#">Contact Us</a>
+      </div>
+    </div>
+    <div class="footer-disclaimer">
+      <p>⚠️ <strong>Disclaimer:</strong> This website does not provide real phone numbers, real video calls, or any adult content. All call, video, and SMS features are <strong>fake/simulated for fun and entertainment only</strong>. No real communication takes place.</p>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 LiveConnect. All rights reserved. For entertainment purposes only.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== CALL MODAL ===== -->
+<div class="modal-overlay" id="callModal">
+  <div class="modal-box">
+    <div class="modal-header-bar">
+      <span id="modalCallType">📞 Audio Call</span>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-avatar-wrap">
+      <div class="modal-avatar" id="modalAvatar">👩</div>
+      <div class="modal-rings">
+        <div class="mring mr1"></div>
+        <div class="mring mr2"></div>
+        <div class="mring mr3"></div>
+      </div>
+    </div>
+    <div class="modal-name" id="modalName">Emma, 24</div>
+    <div class="modal-location" id="modalLocation">📍 New York, USA</div>
+    <div class="modal-status" id="modalStatus">Calling...</div>
+    <div class="modal-timer" id="modalTimer" style="display:none;">00:00</div>
+    <div class="modal-actions">
+      <button class="modal-btn decline" id="modalDecline">
+        <span>📵</span> End Call
+      </button>
+      <button class="modal-btn accept" id="modalAccept">
+        <span>📞</span> Answer
+      </button>
+    </div>
+    <p class="modal-note">🎭 This is a simulated call for entertainment only</p>
+  </div>
+</div>
+
+<!-- ===== CHAT MODAL ===== -->
+<div class="chat-overlay" id="chatModal">
+  <div class="chat-box">
+    <!-- Header -->
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <div class="chat-avatar" id="chatAvatar">👩</div>
+        <div class="chat-header-info">
+          <div class="chat-header-name" id="chatName">Priya, 22</div>
+          <div class="chat-header-status">
+            <span class="chat-online-dot"></span> Online
+          </div>
+        </div>
+      </div>
+      <div class="chat-header-right">
+        <button class="chat-icon-btn" id="chatCallBtn" title="Audio Call">📞</button>
+        <button class="chat-icon-btn" id="chatVideoBtn" title="Video Call">📹</button>
+        <button class="chat-icon-btn chat-close-btn" id="chatClose">✕</button>
+      </div>
+    </div>
+    <!-- Messages -->
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-date-divider">Today</div>
+    </div>
+    <!-- Typing indicator -->
+    <div class="chat-typing" id="chatTyping" style="display:none;">
+      <span id="chatTypingName">Priya</span> is typing
+      <span class="typing-dots"><span></span><span></span><span></span></span>
+    </div>
+    <!-- Input -->
+    <div class="chat-input-bar">
+      <button class="chat-emoji-btn" id="chatEmojiToggle">😊</button>
+      <input type="text" id="chatInput" placeholder="Type a message..." autocomplete="off" />
+      <button class="chat-send-btn" id="chatSend">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+      </button>
+    </div>
+    <!-- Emoji Picker (simple) -->
+    <div class="emoji-picker" id="emojiPicker" style="display:none;">
+      <span>😊</span><span>😂</span><span>😍</span><span>🥰</span><span>😘</span>
+      <span>😎</span><span>🤩</span><span>😜</span><span>🤗</span><span>😇</span>
+      <span>❤️</span><span>🔥</span><span>💯</span><span>👍</span><span>🙏</span>
+      <span>✨</span><span>💕</span><span>😭</span><span>🥺</span><span>👋</span>
+    </div>
+    <p class="chat-note">🎭 Simulated chat for entertainment only</p>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

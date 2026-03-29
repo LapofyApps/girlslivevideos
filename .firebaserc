@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "kerala2024-e2d53"
+  },
+  "targets": {
+    "kerala2024-e2d53": {
+      "hosting": {
+        "liveconnect": [
+          "liveconnect-app"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
