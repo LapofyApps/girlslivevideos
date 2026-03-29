@@ -1147,3 +1147,46 @@ a { text-decoration: none; color: inherit; }
 @media (max-width: 480px) {
   .emoji-picker { grid-template-columns: repeat(8, 1fr); }
 }
+
+/* ===========================
+   EXTRA AD SLOTS
+   =========================== */
+.ad-leaderboard {
+  background: var(--dark2);
+  border-bottom: 1px solid var(--border);
+}
+.ad-desktop-only { display: flex; justify-content: center; }
+.ad-mobile-only  { display: none; }
+
+.ad-468 {
+  background: var(--dark2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.ad-native {
+  background: var(--dark3);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  width: 100%;
+}
+
+/* Sticky sidebar */
+.ad-sidebar {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.ad-sidebar-right { right: 4px; }
+
+@media (max-width: 768px) {
+  .ad-desktop-only { display: none; }
+  .ad-mobile-only  { display: flex; justify-content: center; }
+  .ad-sidebar      { display: none; }
+  .ad-468          { display: none; }
+}
