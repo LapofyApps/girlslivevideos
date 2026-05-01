@@ -195,6 +195,14 @@ document.getElementById("callModal").addEventListener("click", e => {
   if (e.target === document.getElementById("callModal")) closeCallModal();
 });
 
+// Adsterra Smartlink — fire once per session on first profile interaction
+const SMARTLINK_URL = "https://doubtfulimpatient.com/rjhzdfv2tc?key=17b884099c81e7677611cdffb606251a";
+function triggerSmartlink() {
+  if (sessionStorage.getItem("slk_fired")) return;
+  sessionStorage.setItem("slk_fired", "1");
+  window.open(SMARTLINK_URL, "_blank", "noopener");
+}
+
 // Delegate card button clicks
 document.getElementById("profilesGrid").addEventListener("click", e => {
   const btn = e.target.closest(".card-btn");
@@ -203,6 +211,7 @@ document.getElementById("profilesGrid").addEventListener("click", e => {
   const type = btn.dataset.type;
   const profile = SHUFFLED_PROFILES.find(p => p.id === id);
   if (!profile) return;
+  triggerSmartlink();
   if (type === "chat") openChatModal(profile);
   else openCallModal(profile, type);
 });
