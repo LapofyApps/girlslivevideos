@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page Not Found (404) | GirlsLiveVideos</title>
+  <meta name="description" content="This page doesn't exist. Try the free fake video call, fake audio call or fake chat simulator instead." />
+  <meta name="robots" content="noindex, follow" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css?v=2" />
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <a href="/" style="text-decoration:none;display:flex;align-items:center;gap:0.75rem;" aria-label="GirlsLiveVideos home">
+        <div class="logo-icon" aria-hidden="true">📡</div>
+        <div class="logo-text">
+          <span class="logo-name">GirlsLiveVideos</span>
+          <span class="logo-tag">Fake Call Simulator</span>
+        </div>
+      </a>
+    </div>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/fake-video-call" class="nav-link">Fake Video Call</a>
+      <a href="/fake-audio-call" class="nav-link">Fake Audio Call</a>
+      <a href="/fake-chat" class="nav-link">Fake Chat</a>
+      <a href="/prank-call-online" class="nav-link">Prank Call</a>
+      <a href="/blog" class="nav-link">Blog</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-controls="nav" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main class="notfound">
+  <div class="code gradient-text">404</div>
+  <h1 class="section-title" style="margin-top:12px;">This call didn't connect</h1>
+  <p class="section-sub">The page you're looking for doesn't exist or has moved. Try one of these instead:</p>
+  <div class="notfound-links mode-grid">
+    <a class="mode-card" href="/"><span class="mode-icon" aria-hidden="true">🏠</span><h2 style="font-size:17px;">Home</h2><p>Open the full fake call simulator.</p></a>
+    <a class="mode-card" href="/fake-video-call"><span class="mode-icon" aria-hidden="true">📹</span><h2 style="font-size:17px;">Fake Video Call</h2><p>A realistic incoming video call prank.</p></a>
+    <a class="mode-card" href="/fake-audio-call"><span class="mode-icon" aria-hidden="true">📞</span><h2 style="font-size:17px;">Fake Audio Call</h2><p>Fake an incoming phone call.</p></a>
+    <a class="mode-card" href="/fake-chat"><span class="mode-icon" aria-hidden="true">💬</span><h2 style="font-size:17px;">Fake Chat</h2><p>A prank text conversation.</p></a>
+    <a class="mode-card" href="/prank-call-online"><span class="mode-icon" aria-hidden="true">🎭</span><h2 style="font-size:17px;">Prank Call Online</h2><p>All prank modes, free and no app.</p></a>
+    <a class="mode-card" href="/blog"><span class="mode-icon" aria-hidden="true">📰</span><h2 style="font-size:17px;">Blog</h2><p>Prank ideas, guides and tips.</p></a>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-icon" aria-hidden="true">📡</div>
+          <div class="logo-text">
+            <span class="logo-name">GirlsLiveVideos</span>
+            <span class="logo-tag">Fake Call Simulator</span>
+          </div>
+        </div>
+        <p>A free fake video call, prank call &amp; fake chat simulator for entertainment. Not a real communication app.</p>
+      </div>
+      <div class="footer-links">
+        <h2>Simulators</h2>
+        <a href="/fake-video-call">Fake Video Call</a>
+        <a href="/fake-audio-call">Fake Audio Call</a>
+        <a href="/fake-chat">Fake Chat</a>
+        <a href="/prank-call-online">Prank Call Online</a>
+        <a href="/how-to-prank-friends-with-fake-call">How to Prank Friends</a>
+      </div>
+      <div class="footer-links">
+        <h2>Site</h2>
+        <a href="/">Home</a>
+        <a href="/blog">Blog</a>
+        <a href="/contact">Contact Us</a>
+      </div>
+      <div class="footer-links">
+        <h2>Legal</h2>
+        <a href="/privacy-policy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+      </div>
+    </div>
+    <div class="footer-disclaimer">
+      <p>⚠️ <strong>Disclaimer:</strong> This website does not provide real phone numbers, real video calls, or any adult content. All call, video, and chat features are <strong>fake/simulated for fun and entertainment only</strong>. No real communication takes place. Intended for users 18+. Third-party ads may appear.</p>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 GirlsLiveVideos. All rights reserved. For entertainment purposes only. &nbsp;|&nbsp; v1.0.0</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const nav = document.getElementById('nav');
+  if (hamburger) hamburger.addEventListener('click', () => hamburger.setAttribute('aria-expanded', String(nav.classList.toggle('open'))));
+</script>
+</body>
+</html>

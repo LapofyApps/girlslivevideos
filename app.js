@@ -1,11 +1,12 @@
 /* ===========================
    PROFILE DATA
    =========================== */
-// Portrait URLs from randomuser.me — age-mapped:
+// Self-hosted WebP copies (128×128) of randomuser.me portraits — age-mapped:
 //   20-22 → portraits 1-25   (youthful)
 //   23-25 → portraits 26-55  (mid-20s)
 //   26-29 → portraits 56-80  (late-20s)
-const _p = n => `https://randomuser.me/api/portraits/women/${n}.jpg`;
+const _p = n => `/img/profiles/w${n}.webp`;
+const avatarAlt = p => `Simulated profile avatar – ${p.name}`;
 
 const PROFILES = [
   // ── India (20 profiles across different states) ──
@@ -48,17 +49,107 @@ function shuffle(arr) {
 
 const SHUFFLED_PROFILES = shuffle(PROFILES);
 
-const PAGE_SIZE = 12;
+// The grid can be embedded on any page. Optional attributes:
+//   data-sim-type="video|audio|chat"  → preset filter
+//   data-sim-limit="6"                → page size
+const GRID = document.getElementById("profilesGrid");
+const PAGE_SIZE = GRID ? parseInt(GRID.dataset.simLimit || "12", 10) : 12;
 let currentPage = 1;
-let filteredProfiles = [...SHUFFLED_PROFILES];
-let activeFilter = "all";
+let activeFilter = (GRID && GRID.dataset.simType) || "all";
 let searchQuery = "";
+let filteredProfiles = SHUFFLED_PROFILES.filter(p => activeFilter === "all" || p.types.includes(activeFilter));
+
+/* ===========================
+   MODAL MARKUP (shared by every page with a simulator)
+   =========================== */
+const MODALS_HTML = `
+<div class="modal-overlay" id="callModal" role="dialog" aria-modal="true" aria-labelledby="modalName">
+  <div class="modal-box">
+    <div class="modal-header-bar">
+      <span id="modalCallType">📞 Audio Call</span>
+      <button class="modal-close" id="modalClose" aria-label="Close simulated call">✕</button>
+    </div>
+    <div class="modal-avatar-wrap">
+      <div class="modal-avatar" id="modalAvatar">👩</div>
+      <div class="modal-rings">
+        <div class="mring mr1"></div>
+        <div class="mring mr2"></div>
+        <div class="mring mr3"></div>
+      </div>
+    </div>
+    <div class="modal-name" id="modalName">Emma, 24</div>
+    <div class="modal-location" id="modalLocation">📍 New York, USA</div>
+    <div class="modal-status" id="modalStatus">Calling...</div>
+    <div class="modal-timer" id="modalTimer" style="display:none;">00:00</div>
+    <div class="modal-actions">
+      <button class="modal-btn decline" id="modalDecline">
+        <span>📵</span> End Call
+      </button>
+      <button class="modal-btn accept" id="modalAccept">
+        <span>📞</span> Answer
+      </button>
+    </div>
+    <p class="modal-note">🎭 This is a simulated call for entertainment only</p>
+  </div>
+</div>
+
+<div class="chat-overlay" id="chatModal" role="dialog" aria-modal="true" aria-labelledby="chatName">
+  <div class="chat-box">
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <div class="chat-avatar" id="chatAvatar">👩</div>
+        <div class="chat-header-info">
+          <div class="chat-header-name" id="chatName">Priya, 22</div>
+          <div class="chat-header-status">
+            <span class="chat-online-dot"></span> Online (simulated)
+          </div>
+        </div>
+      </div>
+      <div class="chat-header-right">
+        <button class="chat-icon-btn" id="chatCallBtn" title="Audio Call" aria-label="Start simulated audio call">📞</button>
+        <button class="chat-icon-btn" id="chatVideoBtn" title="Video Call" aria-label="Start simulated video call">📹</button>
+        <button class="chat-icon-btn chat-close-btn" id="chatClose" aria-label="Close simulated chat">✕</button>
+      </div>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-date-divider">Today</div>
+    </div>
+    <div class="chat-typing" id="chatTyping" style="display:none;">
+      <span id="chatTypingName">Priya</span> is typing
+      <span class="typing-dots"><span></span><span></span><span></span></span>
+    </div>
+    <div class="chat-input-bar">
+      <button class="chat-emoji-btn" id="chatEmojiToggle" aria-label="Insert emoji">😊</button>
+      <input type="text" id="chatInput" placeholder="Type a message..." autocomplete="off" aria-label="Message" />
+      <button class="chat-send-btn" id="chatSend" aria-label="Send message">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+      </button>
+    </div>
+    <div class="emoji-picker" id="emojiPicker" style="display:none;">
+      <span>😊</span><span>😂</span><span>😍</span><span>🥰</span><span>😘</span>
+      <span>😎</span><span>🤩</span><span>😜</span><span>🤗</span><span>😇</span>
+      <span>❤️</span><span>🔥</span><span>💯</span><span>👍</span><span>🙏</span>
+      <span>✨</span><span>💕</span><span>😭</span><span>🥺</span><span>👋</span>
+    </div>
+    <p class="chat-note">🎭 Simulated chat for entertainment only</p>
+  </div>
+</div>`;
+
+function on(id, evt, fn) {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener(evt, fn);
+}
+
+if (GRID && !document.getElementById("callModal")) {
+  document.body.insertAdjacentHTML("beforeend", MODALS_HTML);
+}
 
 /* ===========================
    RENDER PROFILES
    =========================== */
 function renderProfiles(reset = false) {
-  const grid = document.getElementById("profilesGrid");
+  const grid = GRID;
+  if (!grid) return;
   if (reset) { grid.innerHTML = ""; currentPage = 1; }
 
   const start = (currentPage - 1) * PAGE_SIZE;
@@ -76,7 +167,7 @@ function renderProfiles(reset = false) {
 
     card.innerHTML = `
       <div class="card-avatar-wrap">
-        <img class="card-avatar card-photo" src="${p.img}" alt="${p.name}" loading="lazy" />
+        <img class="card-avatar card-photo" src="${p.img}" alt="${avatarAlt(p)}" width="80" height="80" loading="lazy" decoding="async" />
         <div class="online-badge"></div>
       </div>
       <div class="card-name">${p.name}, ${p.age}</div>
@@ -94,6 +185,7 @@ function renderProfiles(reset = false) {
 
   // Show/hide load more
   const btn = document.getElementById("loadMoreBtn");
+  if (!btn) return;
   const totalShown = Math.min(currentPage * PAGE_SIZE, filteredProfiles.length);
   btn.style.display = totalShown >= filteredProfiles.length ? "none" : "block";
 }
@@ -122,12 +214,14 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
   });
 });
 
-document.getElementById("searchInput").addEventListener("input", e => {
+const searchInputEl = document.getElementById("searchInput");
+if (searchInputEl) searchInputEl.addEventListener("input", e => {
   searchQuery = e.target.value.trim().toLowerCase();
   applyFilter();
 });
 
-document.getElementById("loadMoreBtn").addEventListener("click", () => {
+const loadMoreEl = document.getElementById("loadMoreBtn");
+if (loadMoreEl) loadMoreEl.addEventListener("click", () => {
   currentPage++;
   renderProfiles(false);
 });
@@ -142,7 +236,7 @@ let callConnected = false;
 function openCallModal(profile, type) {
   const overlay = document.getElementById("callModal");
   const avatarEl = document.getElementById("modalAvatar");
-  avatarEl.innerHTML = `<img src="${profile.img}" alt="${profile.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`;
+  avatarEl.innerHTML = `<img src="${profile.img}" alt="${avatarAlt(profile)}" width="90" height="90" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`;
   document.getElementById("modalName").textContent = `${profile.name}, ${profile.age}`;
   document.getElementById("modalLocation").textContent = `📍 ${profile.city}, ${profile.country}`;
   document.getElementById("modalCallType").textContent = type === "video" ? "📹 Video Call" : "📞 Audio Call";
@@ -187,11 +281,11 @@ function closeCallModal() {
   callConnected = false;
 }
 
-document.getElementById("modalDecline").addEventListener("click", closeCallModal);
-document.getElementById("modalClose").addEventListener("click", closeCallModal);
-document.getElementById("modalAccept").addEventListener("click", connectCall);
+on("modalDecline", "click", closeCallModal);
+on("modalClose", "click", closeCallModal);
+on("modalAccept", "click", connectCall);
 
-document.getElementById("callModal").addEventListener("click", e => {
+on("callModal", "click", e => {
   if (e.target === document.getElementById("callModal")) closeCallModal();
 });
 
@@ -204,7 +298,7 @@ function triggerSmartlink() {
 }
 
 // Delegate card button clicks
-document.getElementById("profilesGrid").addEventListener("click", e => {
+on("profilesGrid", "click", e => {
   const btn = e.target.closest(".card-btn");
   if (!btn) return;
   const id = parseInt(btn.dataset.id);
@@ -253,7 +347,7 @@ let chatReplyTimeout = null;
 function openChatModal(profile) {
   chatProfile = profile;
 
-  document.getElementById("chatAvatar").innerHTML = `<img src="${profile.img}" alt="${profile.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`;
+  document.getElementById("chatAvatar").innerHTML = `<img src="${profile.img}" alt="${avatarAlt(profile)}" width="44" height="44" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`;
   document.getElementById("chatName").textContent = `${profile.name}, ${profile.age}`;
   document.getElementById("chatTypingName").textContent = profile.name;
 
@@ -335,37 +429,37 @@ function sendMessage() {
 }
 
 // Send on button click
-document.getElementById("chatSend").addEventListener("click", sendMessage);
+on("chatSend", "click", sendMessage);
 
 // Send on Enter key
-document.getElementById("chatInput").addEventListener("keydown", e => {
+on("chatInput", "keydown", e => {
   if (e.key === "Enter") sendMessage();
 });
 
 // Close button
-document.getElementById("chatClose").addEventListener("click", closeChatModal);
+on("chatClose", "click", closeChatModal);
 
 // Click outside to close
-document.getElementById("chatModal").addEventListener("click", e => {
+on("chatModal", "click", e => {
   if (e.target === document.getElementById("chatModal")) closeChatModal();
 });
 
 // Call/video from inside chat
-document.getElementById("chatCallBtn").addEventListener("click", () => {
+on("chatCallBtn", "click", () => {
   if (chatProfile) { closeChatModal(); openCallModal(chatProfile, "audio"); }
 });
-document.getElementById("chatVideoBtn").addEventListener("click", () => {
+on("chatVideoBtn", "click", () => {
   if (chatProfile) { closeChatModal(); openCallModal(chatProfile, "video"); }
 });
 
 // Emoji picker toggle
-document.getElementById("chatEmojiToggle").addEventListener("click", e => {
+on("chatEmojiToggle", "click", e => {
   e.stopPropagation();
   const picker = document.getElementById("emojiPicker");
   picker.style.display = picker.style.display === "none" ? "grid" : "none";
 });
 
-document.getElementById("emojiPicker").addEventListener("click", e => {
+on("emojiPicker", "click", e => {
   if (e.target.tagName === "SPAN") {
     const input = document.getElementById("chatInput");
     input.value += e.target.textContent;
@@ -376,7 +470,7 @@ document.getElementById("emojiPicker").addEventListener("click", e => {
 
 document.addEventListener("click", e => {
   const picker = document.getElementById("emojiPicker");
-  if (!picker.contains(e.target) && e.target.id !== "chatEmojiToggle") {
+  if (picker && !picker.contains(e.target) && e.target.id !== "chatEmojiToggle") {
     picker.style.display = "none";
   }
 });
@@ -384,8 +478,9 @@ document.addEventListener("click", e => {
 /* ===========================
    HAMBURGER MENU
    =========================== */
-document.getElementById("hamburger").addEventListener("click", () => {
-  document.getElementById("nav").classList.toggle("open");
+on("hamburger", "click", e => {
+  const open = document.getElementById("nav").classList.toggle("open");
+  e.currentTarget.setAttribute("aria-expanded", String(open));
 });
 
 /* ===========================
@@ -403,19 +498,6 @@ document.querySelectorAll(".faq-q").forEach(q => {
     }
   });
 });
-
-/* ===========================
-   ONLINE COUNT ANIMATION
-   =========================== */
-function animateOnlineCount() {
-  const el = document.getElementById("onlineCount");
-  let base = 2847;
-  setInterval(() => {
-    const delta = Math.floor(Math.random() * 20) - 9;
-    base = Math.max(2000, Math.min(3500, base + delta));
-    el.textContent = base.toLocaleString();
-  }, 3000);
-}
 
 /* ===========================
    SCROLL REVEAL (lightweight)
@@ -444,6 +526,5 @@ function initScrollReveal() {
    =========================== */
 document.addEventListener("DOMContentLoaded", () => {
   renderProfiles(true);
-  animateOnlineCount();
   initScrollReveal();
 });
