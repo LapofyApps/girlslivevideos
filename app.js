@@ -37,6 +37,31 @@ const PROFILES = [
   { id: 24, img: _p(68), name: "Aria",     age: 27, city: "Singapore",       country: "Singapore",     types: ["chat","video"] },
 ];
 
+// Family-friendly set for /santa-video-call (data-sim-set="santa").
+// Own chat replies, and no Smartlink popup.
+const SANTA_REPLIES = [
+  "Ho ho ho! Merry Christmas! 🎅",
+  "Have you been good this year? 😊",
+  "The elves are busy in the workshop right now! 🛠️",
+  "Rudolph says hello! 🦌",
+  "I'm checking my list twice 📜",
+  "Remember to be kind and help at home ⭐",
+  "Mrs. Claus just baked fresh cookies 🍪",
+  "Don't forget to go to bed early on Christmas Eve! 🌙",
+  "What would you like for Christmas? 🎁",
+  "It's very snowy at the North Pole today ❄️",
+  "Keep being good — I'm watching from the North Pole! 👀",
+  "Ho ho ho! That made me laugh! 😄",
+];
+const SANTA_PROFILES = [
+  { id: 101, img: "/img/christmas/santa.svg",     name: "Santa Claus", city: "North Pole", country: "Santa's Workshop", types: ["video","audio","chat"], replies: SANTA_REPLIES, family: true },
+  { id: 102, img: "/img/christmas/mrs-claus.svg", name: "Mrs. Claus",  city: "North Pole", country: "Santa's Kitchen",  types: ["video","audio","chat"], replies: SANTA_REPLIES, family: true },
+  { id: 103, img: "/img/christmas/elf.svg",       name: "Jingle the Elf", city: "North Pole", country: "Toy Workshop", types: ["video","audio","chat"], replies: SANTA_REPLIES, family: true },
+];
+
+// "Priya, 22" for regular profiles, just the name when there is no age
+const displayName = p => (p.age ? `${p.name}, ${p.age}` : p.name);
+
 /* Fisher-Yates shuffle — runs once on page load */
 function shuffle(arr) {
   const a = [...arr];
@@ -47,12 +72,12 @@ function shuffle(arr) {
   return a;
 }
 
-const SHUFFLED_PROFILES = shuffle(PROFILES);
-
 // The grid can be embedded on any page. Optional attributes:
 //   data-sim-type="video|audio|chat"  → preset filter
 //   data-sim-limit="6"                → page size
+//   data-sim-set="santa"              → Christmas profiles instead of the default set
 const GRID = document.getElementById("profilesGrid");
+const SHUFFLED_PROFILES = GRID && GRID.dataset.simSet === "santa" ? SANTA_PROFILES : shuffle(PROFILES);
 const PAGE_SIZE = GRID ? parseInt(GRID.dataset.simLimit || "12", 10) : 12;
 let currentPage = 1;
 let activeFilter = (GRID && GRID.dataset.simType) || "all";
@@ -170,7 +195,7 @@ function renderProfiles(reset = false) {
         <img class="card-avatar card-photo" src="${p.img}" alt="${avatarAlt(p)}" width="80" height="80" loading="lazy" decoding="async" />
         <div class="online-badge"></div>
       </div>
-      <div class="card-name">${p.name}, ${p.age}</div>
+      <div class="card-name">${displayName(p)}</div>
       <div class="card-meta">📍 ${p.city}, ${p.country}</div>
       <div class="card-tags">${tagsHTML}</div>
       <div class="card-actions">
@@ -237,7 +262,7 @@ function openCallModal(profile, type) {
   const overlay = document.getElementById("callModal");
   const avatarEl = document.getElementById("modalAvatar");
   avatarEl.innerHTML = `<img src="${profile.img}" alt="${avatarAlt(profile)}" width="90" height="90" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`;
-  document.getElementById("modalName").textContent = `${profile.name}, ${profile.age}`;
+  document.getElementById("modalName").textContent = displayName(profile);
   document.getElementById("modalLocation").textContent = `📍 ${profile.city}, ${profile.country}`;
   document.getElementById("modalCallType").textContent = type === "video" ? "📹 Video Call" : "📞 Audio Call";
   document.getElementById("modalStatus").textContent = "Calling...";
@@ -305,7 +330,7 @@ on("profilesGrid", "click", e => {
   const type = btn.dataset.type;
   const profile = SHUFFLED_PROFILES.find(p => p.id === id);
   if (!profile) return;
-  triggerSmartlink();
+  if (!profile.family) triggerSmartlink();
   if (type === "chat") openChatModal(profile);
   else openCallModal(profile, type);
 });
@@ -348,7 +373,7 @@ function openChatModal(profile) {
   chatProfile = profile;
 
   document.getElementById("chatAvatar").innerHTML = `<img src="${profile.img}" alt="${avatarAlt(profile)}" width="44" height="44" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`;
-  document.getElementById("chatName").textContent = `${profile.name}, ${profile.age}`;
+  document.getElementById("chatName").textContent = displayName(profile);
   document.getElementById("chatTypingName").textContent = profile.name;
 
   // Clear old messages except date divider
@@ -374,7 +399,8 @@ function closeChatModal() {
 }
 
 function pickReply() {
-  return AUTO_REPLIES[Math.floor(Math.random() * AUTO_REPLIES.length)];
+  const replies = (chatProfile && chatProfile.replies) || AUTO_REPLIES;
+  return replies[Math.floor(Math.random() * replies.length)];
 }
 
 function showTyping() {
